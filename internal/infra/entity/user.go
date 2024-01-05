@@ -5,10 +5,11 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	ID string `json:"id" gorm:"primarykey"`
+	ID uuid.UUID `json:"id" gorm:"primarykey"`
 	Firstname string `json:"firstname"`
 	Lastname string `json:"lastname"`
 	Email string `json:"email" gorm:"unique"`
@@ -24,7 +25,6 @@ func NewUser(firstname,lastname, email, avatar, password string ) *User{
 		panic(err)
 	}
 	return &User{
-		ID: uuid.NewString(),
 		Firstname: firstname,
 		Lastname: lastname,
 		Email: email,
@@ -33,3 +33,9 @@ func NewUser(firstname,lastname, email, avatar, password string ) *User{
 		UpdatedAt: time.Now(),
 	}
 } 
+
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	// UUID version 4
+	u.ID = uuid.New()
+	return
+}

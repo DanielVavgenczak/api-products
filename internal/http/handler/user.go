@@ -18,6 +18,16 @@ func NewUserHandler(service services.UserService) *UserHandler{
 	}
 }
 
+// CreateUser godoc
+// @Summary Register User
+// @Description create a new user account
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param request body dto.UserInput true "user request"
+// @Success 201 
+// @Failure 400
+// @Router /api/v1/user/ [post]
 func (handler *UserHandler) HandlerCreateUser(c *gin.Context) {
 	var userInput dto.UserInput 
 	if err := c.BindJSON(&userInput); err != nil {
@@ -40,3 +50,4 @@ func (handler *UserHandler) HandlerCreateUser(c *gin.Context) {
 	})
 
 }
+

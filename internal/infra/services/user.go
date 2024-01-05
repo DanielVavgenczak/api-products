@@ -2,11 +2,15 @@ package services
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/DanielVavgenczak/api-products/internal/dto"
 	"github.com/DanielVavgenczak/api-products/internal/infra/entity"
 	"github.com/DanielVavgenczak/api-products/internal/infra/repository"
+	"github.com/google/uuid"
+)
+
+var (
+	ErrUserAlreadExists = errors.New("user is alread exists")
 )
 
 type UserService struct {
@@ -24,9 +28,8 @@ func (service *UserService) CreateUser(userInput dto.UserInput) (*entity.User, e
 	if err != nil {
 		return nil, err
 	}
-	if userExists.Email  == userInput.Email && userExists.ID != "" {
-		fmt.Println("de bas", userExists.Email)
-		return nil, errors.New("user is alread exists")
+	if userExists.Email  == userInput.Email && userExists.ID != uuid.Nil {
+		return nil, ErrUserAlreadExists
 	}
 	user, err := service.repository.Create(userInput.Firstname, userInput.Lastname, userInput.Email, userInput.Password, "")
 	if err != nil {
