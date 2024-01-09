@@ -1,15 +1,15 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/DanielVavgenczak/api-products/internal/infra/entity"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type UserInterface interface {
 	Create(firstname, lastname, email, password, avatar string) (*entity.User, error)
 	FindByEmail(email string) (entity.User,error)
+	FindByID(email string) (entity.User,error)
 }
 
 type UserRepository struct {
@@ -44,6 +44,19 @@ func (repo *UserRepository) FindByEmail(email string)(entity.User,error){
 	if err != nil {
 		return entity.User{}, err
 	}
-	fmt.Println("vazio?  ", user)
+	return user, nil
+}
+
+
+func (repo *UserRepository) FindByID(id string)(entity.User,error){
+	var user entity.User
+	convertID, err := uuid.Parse(id)
+	if err != nil {
+		return entity.User{}, err
+	}
+	err = repo.db.Raw("SELECT * FROM users WHERE id = ? ", convertID).Scan(&user).Error
+	if err != nil {
+		return entity.User{}, err
+	}
 	return user, nil
 }

@@ -20,22 +20,28 @@ type User struct {
 }
 
 func NewUser(firstname,lastname, email, avatar, password string ) *User{
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(password),14)
-	if err != nil {
-		panic(err)
-	}
+	
 	return &User{
 		Firstname: firstname,
 		Lastname: lastname,
 		Email: email,
-		Password: string(hashPassword),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
 } 
 
-func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+func (u *User) BeforeSave(tx *gorm.DB) (err error) {
 	// UUID version 4
 	u.ID = uuid.New()
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password),bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	u.Password = string(hashPassword)
 	return
+}
+
+func (u *User) ValidaPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	return err == nil
 }

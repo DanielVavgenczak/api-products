@@ -11,6 +11,7 @@ import (
 
 var (
 	ErrUserAlreadExists = errors.New("user is alread exists")
+	ErrUserNotFound = errors.New("user not found")
 )
 
 type UserService struct {
@@ -41,6 +42,18 @@ func (service *UserService) CreateUser(userInput dto.UserInput) (*entity.User, e
 
 func (service *UserService) FindByEmailUser(email string) (entity.User, error) {
 	user, err := service.repository.FindByEmail(email)
+	if err != nil {
+		return entity.User{}, err
+	}
+	if user.ID == uuid.Nil{
+		return entity.User{}, ErrUserNotFound
+	}
+	return user, nil
+}
+
+
+func (service *UserService) FindByIDUser(id string) (entity.User, error) {
+	user, err := service.repository.FindByID(id)
 	if err != nil {
 		return entity.User{}, err
 	}

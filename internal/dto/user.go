@@ -6,3 +6,9 @@ type UserInput struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 }
+
+// @dto to login user account
+type UserInputLogin struct {
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}

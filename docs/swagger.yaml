@@ -10,6 +10,13 @@ definitions:
       password:
         type: string
     type: object
+  dto.UserInputLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact:
     email: support@swagger.io
@@ -20,7 +27,29 @@ info:
   title: Api Products
   version: "1.0"
 paths:
-  /user/:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user account
+      parameters:
+      - description: user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserInputLogin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+      summary: Login User account
+      tags:
+      - user
+  /api/v1/user/:
     post:
       consumes:
       - application/json
@@ -40,6 +69,27 @@ paths:
         "400":
           description: Bad Request
       summary: Register User
+      tags:
+      - user
+  /api/v1/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Find user by id
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Find user by id
       tags:
       - user
 securityDefinitions:
