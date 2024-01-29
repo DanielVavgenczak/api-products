@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/DanielVavgenczak/api-products/internal/dto"
-	"github.com/DanielVavgenczak/api-products/internal/helper"
 	"github.com/DanielVavgenczak/api-products/internal/infra/services"
 	"github.com/gin-gonic/gin"
 )
@@ -61,6 +60,7 @@ func (handler *UserHandler) HandlerCreateUser(c *gin.Context) {
 // @Success 200 
 // @Failure 404
 // @Router /api/v1/user/{id} [get]
+// @Security ApiKeyAuth
 func (handler *UserHandler) HandleFindByID(c *gin.Context) {
 	id := c.Param("id")
 	user,err := handler.userService.FindByIDUser(id)
@@ -93,33 +93,16 @@ func (handler *UserHandler) HandleFindByID(c *gin.Context) {
 				"error": err.Error(),
 			})
 			return
-		}		
-		user, err := handler.userService.FindByEmailUser(login.Email)	
+		}				
+		user, err := handler.userService.UserLogin(login.Email, login.Password)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": err.Error(),
 			})
 			return
 		}
-
-		// compare password 
-		if ok := user.ValidaPassword(login.Password); !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "user not found",
-			})
-			return
-		}
-
-		token, err := helper.GenerateToken(user.ID.String(), 300)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-
 		c.JSON(http.StatusAccepted, gin.H{
-			"data": token,
+			"data": user,
 		})
 	}
 

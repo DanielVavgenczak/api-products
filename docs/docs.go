@@ -90,6 +90,11 @@ const docTemplate = `{
         },
         "/api/v1/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Find user by id",
                 "consumes": [
                     "application/json"

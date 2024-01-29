@@ -8,7 +8,7 @@ import (
 
 type UserInterface interface {
 	Create(firstname, lastname, email, password, avatar string) (*entity.User, error)
-	FindByEmail(email string) (entity.User,error)
+	FindByEmail(email string) (*entity.User,error)
 	FindByID(email string) (entity.User,error)
 }
 
@@ -38,13 +38,13 @@ func (repo *UserRepository) Create(firstname, lastname, email, password, avatar 
 	return &user, nil
 }
 
-func (repo *UserRepository) FindByEmail(email string)(entity.User,error){
+func (repo *UserRepository) FindByEmail(email string)(*entity.User,error){
 	var user entity.User
-	err := repo.db.Raw("SELECT * FROM users WHERE email = ? ", email).Scan(&user).Error
+	err := repo.db.Table("users").Where("email", email).Scan(&user).Error
 	if err != nil {
-		return entity.User{}, err
+		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 

@@ -89,6 +89,8 @@ paths:
           description: OK
         "404":
           description: Not Found
+      security:
+      - ApiKeyAuth: []
       summary: Find user by id
       tags:
       - user

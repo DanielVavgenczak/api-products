@@ -41,11 +41,10 @@ func main() {
 	services := services.InitServices(*repositories)
 	
 	userHandler := handler.NewUserHandler(services.UserService)
-
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")	
 	v1.POST("/login", userHandler.HandleLogin)
-	v1.POST("/user", userHandler.HandlerCreateUser)
+	v1.POST("/register", userHandler.HandlerCreateUser)
 	v1.GET("/user/:id", middleware.Authentication(), userHandler.HandleFindByID)
 	// badgg.irlk
 	urlDoc := ginSwagger.URL("http://localhost:8080/docs/doc.json") 
