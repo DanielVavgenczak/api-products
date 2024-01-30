@@ -47,7 +47,6 @@ func (repo *UserRepository) FindByEmail(email string)(*entity.User,error){
 	return &user, nil
 }
 
-
 func (repo *UserRepository) FindByID(id string)(entity.User,error){
 	var user entity.User
 	convertID, err := uuid.Parse(id)

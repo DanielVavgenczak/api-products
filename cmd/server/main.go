@@ -6,6 +6,7 @@ import (
 	"github.com/DanielVavgenczak/api-products/docs"
 	"github.com/DanielVavgenczak/api-products/internal/config"
 	"github.com/DanielVavgenczak/api-products/internal/http/handler"
+	"github.com/DanielVavgenczak/api-products/internal/http/routes"
 	"github.com/DanielVavgenczak/api-products/internal/infra/database"
 	"github.com/DanielVavgenczak/api-products/internal/infra/repository"
 	"github.com/DanielVavgenczak/api-products/internal/infra/services"
@@ -41,8 +42,13 @@ func main() {
 	services := services.InitServices(*repositories)
 	
 	userHandler := handler.NewUserHandler(services.UserService)
+	categoryHander := handler.NewCategoryHandle(services.CategoryService)
+
+	
+
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")	
+	routes.CategoryRoutes(v1, *categoryHander)
 	v1.POST("/login", userHandler.HandleLogin)
 	v1.POST("/register", userHandler.HandlerCreateUser)
 	v1.GET("/user/:id", middleware.Authentication(), userHandler.HandleFindByID)
