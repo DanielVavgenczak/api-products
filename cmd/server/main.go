@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/DanielVavgenczak/api-products/docs"
 	"github.com/DanielVavgenczak/api-products/internal/config"
 	"github.com/DanielVavgenczak/api-products/internal/http/handler"
-	"github.com/DanielVavgenczak/api-products/internal/http/routes"
 	"github.com/DanielVavgenczak/api-products/internal/infra/database"
 	"github.com/DanielVavgenczak/api-products/internal/infra/repository"
 	"github.com/DanielVavgenczak/api-products/internal/infra/services"
@@ -43,15 +44,24 @@ func main() {
 	
 	userHandler := handler.NewUserHandler(services.UserService)
 	categoryHander := handler.NewCategoryHandle(services.CategoryService)
-
 	
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")	
-	routes.CategoryRoutes(v1, *categoryHander)
+	//routes.CategoryRoutes(v1, *categoryHander)
 	v1.POST("/login", userHandler.HandleLogin)
 	v1.POST("/register", userHandler.HandlerCreateUser)
 	v1.GET("/user/:id", middleware.Authentication(), userHandler.HandleFindByID)
+
+	v1.POST("/category", middleware.Authentication(), categoryHander.CreateCategoryHandler)
+
+	v1.GET("/timeline", middleware.Authentication(), func (c *gin.Context)  {
+		user_id,_ := c.Get("user_id")
+		fmt.Println("veio ou não", user_id)
+		c.JSON(http.StatusAccepted, gin.H{
+			"data":"timeline list",
+		})
+	})
 	// badgg.irlk
 	urlDoc := ginSwagger.URL("http://localhost:8080/docs/doc.json") 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler,urlDoc))

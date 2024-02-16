@@ -2,7 +2,6 @@ package helper
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"time"
 
@@ -25,10 +24,8 @@ func GenerateToken(id string, expired int) (string, error)  {
 	return tokenGenrated, nil
 }
 
-
-func ValidToken(tokenBearer string) error {
+func ValidToken(tokenBearer string) (string,error) {
 	tokenConfig :=  os.Getenv("TOKEN_CONFIG")
-	fmt.Println("valida", tokenConfig)
 	token, err := jwt.Parse(tokenBearer,func (t *jwt.Token) (interface{}, error)  {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok  {
 				return nil, errors.New("token not authorized")
@@ -36,13 +33,13 @@ func ValidToken(tokenBearer string) error {
 			return []byte(tokenConfig), nil
 	})
 	if err != nil {
-		fmt.Println("Aqui sera")
-		return errors.New("token is invalid")
+		return "",errors.New("token is invalid")
 	}
-	_, ok := token.Claims.(jwt.MapClaims)
+	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		return errors.New("token is invalid")
+		return "",errors.New("token is invalid")
 	}
-
-	return nil
+	
+	current_userid := claims["sub"].(string)
+	return current_userid, nil
 }

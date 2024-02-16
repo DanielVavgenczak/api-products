@@ -37,7 +37,10 @@ func connection() *gorm.DB {
 }
 
 func migrations(db *gorm.DB) error {
-	err := db.AutoMigrate(&entity.User{})
+	err := db.AutoMigrate(
+		&entity.User{},
+		&entity.Category{},
+	)
 	if err != nil {
 		return err
 	}

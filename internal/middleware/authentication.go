@@ -10,6 +10,7 @@ import (
 
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		
 		// Auth Header
 		authHeader := c.GetHeader("Authorization")
 		// Must have Bearer in the header
@@ -38,7 +39,7 @@ func Authentication() gin.HandlerFunc {
 		}
 
 		// valid token 
-		err := helper.ValidToken(token[1])
+		current, err := helper.ValidToken(token[1])
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": err.Error(),
@@ -46,6 +47,7 @@ func Authentication() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+		c.Set("user_id", current)
+		c.Next()
 	}
 }

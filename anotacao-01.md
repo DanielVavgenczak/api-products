@@ -1,9 +1,9 @@
 Api Products
 
-[] CRUD DE PRODUTOS
-[] Upload de imagens
-[] Role: apenas adminstradores podem deletar produtos e caso necessario podem dar permissões para funcionarios
-realizarem essa tarefa, porem deve-se registrar essa questão de dar permissão
-[] Role: funcionarios podem cadastrar produtos, ler, editar
-[] Paginação de produtos
-[] Authenticação de admin e funcionarios
+Basicamente um usuario pode criar uma conta e cadastrar seus produtos e categorias para seus produtos.
+Também teremos uma timeline listando todos os produtos e seus usuários com filtro por: "Nome","Categoria", "Preço".
+Ao clicar no produto dentro da timeline sera listado todos os detalhes do produto.
+
+Para poder comprar o produto o usuario deve ser cadastrar na plataforma, e adicionar o carrinho de compras
+
+[ ]

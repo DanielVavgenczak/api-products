@@ -15,9 +15,9 @@ type User struct {
 	Email string `json:"email" gorm:"unique"`
 	Avatar string `json:"avatar"`
 	Password string `json:"password"`
-	Role string `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	Categories []Category `gorm:"foreignKey:UserID;references:id"`
 }
 
 func NewUser(firstname,lastname, email, avatar, password string ) *User{	

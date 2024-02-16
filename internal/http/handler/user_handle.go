@@ -94,7 +94,7 @@ func (handler *UserHandler) HandleFindByID(c *gin.Context) {
 			})
 			return
 		}				
-		user, err := handler.userService.UserLogin(login.Email, login.Password)
+		user, err := handler.userService.UserLogin(c, login.Email, login.Password)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": err.Error(),
