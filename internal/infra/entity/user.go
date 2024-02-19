@@ -10,14 +10,14 @@ import (
 
 type User struct {
 	ID uuid.UUID `json:"id" gorm:"primarykey"`
-	Firstname string `json:"firstname"`
-	Lastname string `json:"lastname"`
-	Email string `json:"email" gorm:"unique"`
-	Avatar string `json:"avatar"`
-	Password string `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Categories []Category `gorm:"foreignKey:UserID;references:id"`
+	Firstname string `json:"firstname,omitempty"`
+	Lastname string `json:"lastname,omitempty"`
+	Email string `json:"email,omitempty" gorm:"unique"`
+	Avatar string `json:"avatar,omitempty"`
+	Password string `json:"password,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	Categories []Category `json:"categories,omitempty" gorm:"foreignkey:UserID;references:id"`
 }
 
 func NewUser(firstname,lastname, email, avatar, password string ) *User{	

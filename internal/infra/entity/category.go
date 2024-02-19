@@ -9,10 +9,11 @@ import (
 
 type Category struct {
 	ID uuid.UUID `json:"id" gorm:"primarykey"`
-	Title string `json:"title" gorm:"unique"`
+	Title string `json:"title"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	UserID uuid.UUID `json:"user_id" gorm:"type:char(36);primary_key"`
+	UserID uuid.UUID `json:"user_id" gorm:"type:char(36);primary_key"`	
+	User User `json:"user" gorm:"foreignKey:UserID"`	
 }
 
 func NewCategory(title, user_id string) *Category {

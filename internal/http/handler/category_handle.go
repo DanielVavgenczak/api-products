@@ -41,3 +41,25 @@ func (cateHandle *CategoryHandle) CreateCategoryHandler(c *gin.Context) {
 		"data": categoryUser,
 	})
 }
+
+func (h *CategoryHandle) FindCategoryByUser(c *gin.Context) {
+	user_id, ok := c.Get("user_id"); 
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "erro no token aqui",
+		})
+		return
+	}
+	id := user_id.(string)
+	categoryUser, err := h.cateService.FindCategoryByUser(id)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status_code": http.StatusOK,
+		"data": categoryUser,
+	})	
+}

@@ -54,6 +54,7 @@ func main() {
 	v1.GET("/user/:id", middleware.Authentication(), userHandler.HandleFindByID)
 
 	v1.POST("/category", middleware.Authentication(), categoryHander.CreateCategoryHandler)
+	v1.GET("/category", middleware.Authentication(), categoryHander.FindCategoryByUser)
 
 	v1.GET("/timeline", middleware.Authentication(), func (c *gin.Context)  {
 		user_id,_ := c.Get("user_id")
