@@ -40,3 +40,8 @@ func (s *CategoryService) FindCategoryByUser(user_id string)([]*entity.Category,
 	}
 	return categories, nil
 }
+
+
+func (s *CategoryService) DeleteCaateogry(user_id, category_id string) {
+	s.repository.DeleteCategory(user_id,category_id)
+}

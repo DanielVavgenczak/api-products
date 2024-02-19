@@ -63,3 +63,20 @@ func (h *CategoryHandle) FindCategoryByUser(c *gin.Context) {
 		"data": categoryUser,
 	})	
 }
+
+
+func (h *CategoryHandle) DeleteCategoryHandle(c *gin.Context) {
+	user_id, ok := c.Get("user_id"); 
+	category_id := c.Param("id")
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "erro no token aqui",
+		})
+		return
+	}
+	id := user_id.(string)
+	h.cateService.DeleteCaateogry(id, category_id)
+	c.JSON(http.StatusNoContent, gin.H{
+		"status_code": http.StatusNoContent,
+	})	
+}

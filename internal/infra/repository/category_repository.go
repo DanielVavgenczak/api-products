@@ -17,6 +17,7 @@ type CategoryInterface interface {
 	Create(title, user_id string)(*entity.Category, error)
 	ListByUser(user_id string) ([]*entity.Category, error)
 	FindByTitleAndUserID(title, user_id string)(*entity.Category, error)
+	DeleteCategory(user_id,category_id string) 
 }
 
 type CategoryRepository struct {
@@ -67,6 +68,15 @@ func (cateRepo *CategoryRepository) FindByTitleAndUserID(title,user_id string) (
 		return nil, errors.New(err.Error())
 	}
 	return category, nil
+}
+
+
+func (cateRepo *CategoryRepository) DeleteCategory(user_id, category_id string) {
+	var category *entity.Category
+	 cateRepo.DB.Model(&entity.Category{}).
+					Where("user_id = ? AND id = ?", user_id, category_id).
+					Delete(&category)
+					
 }
 
 
