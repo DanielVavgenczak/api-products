@@ -11,7 +11,7 @@ import (
 type CategoryInterface interface {
 	/** Title is a new category **/
 	Create(title, user_id string)(*entity.Category, error)
-	List() ([]entity.Category, error)
+	ListByUser(user_id string) ([]entity.Category, error)
 	FindByTitleAndUserID(title, user_id string)(*entity.Category, error)
 }
 
@@ -35,9 +35,9 @@ func (cateRepo *CategoryRepository) Create(title,user_id string) (*entity.Catego
 	return category, nil
 }
 
-func (cateRepo *CategoryRepository) List() ([]entity.Category, error) {
+func (cateRepo *CategoryRepository) ListByUser(user_id string) ([]entity.Category, error) {
 	var categories []entity.Category
-	err := cateRepo.DB.Find(&categories).Error
+	err := cateRepo.DB.Find(&categories).Where("user_id", user_id).Error
 	if err != nil {
 		return []entity.Category{}, err
 	}
